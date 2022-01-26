@@ -1,0 +1,10 @@
+{% load i18n %}
+
+<div class="flex py-5 mx-3">
+  <div class="space-x-7">
+    <a class="link-primary text-sm" href="{% url 'wpyblog:blog' %}">{% translate 'All' %}</a>
+    {% for category in categories %}
+    <a class="link-primary text-sm" href="{% url 'wpyblog:category-post-list' category_id=category.id slug=category.slug %}">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+</div>

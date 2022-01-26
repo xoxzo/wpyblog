@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load blog_tags %}
+
+{% block title %}{% translate 'GetOTP Blog' %}{% endblock %}
+
+{% block content %}
+<section class="bg-cool-gray-50 border-t">
+  <div class="max-w-screen-xl px-5 md:px-10 mx-auto">
+    <!-- sidebar container -->
+    {% include 'wpyblog/partials/blog_navigation.html' %}
+    <!-- end sidebar container -->
+  </div>
+</section>
+
+<!-- content container -->
+{% block docs_content %}
+<section class="max-w-screen-xl mx-auto px-5 md:px-12">
+  <div class="flex flex-wrap -mb-16 -mx-4">
+    {% for post in posts %}
+    <div class="w-full sm:w-1/2 lg:w-1/3 mb-16 px-4">
+      <a href="{% url 'wpyblog:view-post' post_id=post.id slug=post.slug %}">
+        <article class="blog-article h-full flex flex-col mt-12 border-b">
+          <!-- post thumbnail -->
+          <div class="mb-5">
+            {% if post.jetpack_featured_media_url and post.jetpack_featured_media_url.strip %}
+            <img src="{{ post.jetpack_featured_media_url }}" alt="{{ post.title.rendered|safe }}" class="object-cover w-full h-64 md:h-56 rounded border">
+            {% else %}
+            <img src="{% static 'getotp-thumbnail.png' %}" alt="{{ post.title.rendered|safe }}" class="object-cover w-full h-64 md:h-56 rounded border">
+            {% endif %}
+          </div>
+          <!-- end post thumbnail -->
+          <p class="text-gray-400 text-xs mb-1.5">{{ post.date|string_to_date }}</p>
+          <h2 class="text-cool-gray-900 block text-2xl font-semibold mb-4">
+            {{ post.title.rendered|safe }}
+          </h2>
+          <!-- post excerpt -->
+          <div class="flex-1 text-sm text-cool-gray-500 leading-normal">
+            {{ post.excerpt.rendered|safe }}
+          </div>
+          <!-- end post excerpt -->
+        </article>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- pagination -->
+  <div class="text-center space-x-3 mt-28 mb-16">
+    {% if pagination.has_previous %}
+    <a class="btn btn-secondary btn-md" href="{{ pagination.prev_link }}">< {% translate 'Previous page' %}</a>
+    {% endif %}
+    {% if pagination.has_next %}
+    <a class="btn btn-secondary btn-md" href="{{ pagination.next_link }}">{% translate 'Next page' %} ></a>
+    {% endif %}
+  </div>
+  <!-- end pagination -->
+</section>
+{% endblock %}
+<!-- end content container -->
+{% endblock %}

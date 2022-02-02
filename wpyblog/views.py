@@ -5,6 +5,7 @@ from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.utils.encoding import uri_to_iri
+from django.utils import translation
 
 import requests
 
@@ -95,11 +96,21 @@ def get_posts_data(page_number, category_id = None, tag_id = None):
     count = response.headers.get("X-WP-Total")
     total_pages = response.headers.get("X-WP-TotalPages")
 
+    current_lang = translation.get_language()
+    if current_lang == "en":
+        current_lang = "en_US"
+
     def process_post(post):
         post["slug"] = uri_to_iri(post["slug"])
         return post
 
+    def filter_lang(post):
+        if post["polylang_current_lang"] == current_lang:
+            return True
+        return False
+
     posts_data["posts"] = map(process_post, posts)
+    posts_data["posts"] = list(filter(filter_lang, posts_data["posts"]))
     posts_data["count"] = count
     posts_data["total_pages"] = total_pages
     

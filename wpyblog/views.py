@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.http import HttpResponse
+from django.utils.encoding import uri_to_iri
 
 import requests
 
@@ -94,7 +95,11 @@ def get_posts_data(page_number, category_id = None, tag_id = None):
     count = response.headers.get("X-WP-Total")
     total_pages = response.headers.get("X-WP-TotalPages")
 
-    posts_data["posts"] = posts
+    def process_post(post):
+        post["slug"] = uri_to_iri(post["slug"])
+        return post
+
+    posts_data["posts"] = map(process_post, posts)
     posts_data["count"] = count
     posts_data["total_pages"] = total_pages
     

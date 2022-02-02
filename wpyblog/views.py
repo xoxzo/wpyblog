@@ -127,8 +127,8 @@ def get_pagination_data(page_number, total_pages, count):
     if next_page_number <= total_pages:
         has_next = True
 
-    prev_link = reverse('tehran-blog') + "?page=" + str(previous_page_number)
-    next_link = reverse('tehran-blog') + "?page=" + str(next_page_number)
+    prev_link = reverse('wpyblog:blog') + "?page=" + str(previous_page_number)
+    next_link = reverse('wpyblog:blog') + "?page=" + str(next_page_number)
 
     pagination_data["previous_page_number"] = previous_page_number
     pagination_data["next_page_number"] = next_page_number

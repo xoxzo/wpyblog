@@ -44,7 +44,7 @@ post_list.html
 ```
 {% for post in posts %}
     
-      <a href="{% url 'tehran-view-post' post_id=post.id slug=post.slug %}">
+      <a href="{% url 'wpyblog:view-post' post_id=post.id slug=post.slug %}">
         
           <!-- post thumbnail -->
           <div class="mb-5">
@@ -73,7 +73,7 @@ post_list.html
 view_post.html
 
 ```
-    <a href="{% url 'tehran-view-post' post_id=post.id slug=post.slug %}"><h2 class="">{{ post.title.rendered|safe }}</h2></a>
+    <a href="{% url 'wpyblog:view-post' post_id=post.id slug=post.slug %}"><h2 class="">{{ post.title.rendered|safe }}</h2></a>
     <p class="">
         {{ post.date|string_to_date }}
         <span class="">·</span>
@@ -90,7 +90,7 @@ view_post.html
     <div class="">
         <p class="">{% translate 'Tags' %} :</p>
         {% for post_tag in post_tags %}
-        <a href="{% url 'tehran-tag-post-list' tag_id=post_tag.id slug=post_tag.slug %}" class="">{{ post_tag.name }}</a>
+        <a href="{% url 'wpyblog:tag-post-list' tag_id=post_tag.id slug=post_tag.slug %}" class="">{{ post_tag.name }}</a>
         {% endfor %}
     </div>
     {% endif %}

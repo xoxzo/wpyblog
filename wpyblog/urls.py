@@ -8,15 +8,19 @@ from .views import (
     clear_cache,
 )
 
-from django.urls import path, re_path
+# Django > 3
+try:
+    from django.urls import re_path as url
+except ImportError:
+    from django.conf.urls import url
 
 app_name = "wpyblog"
 
 urlpatterns = [
-    path("", list_post, name="blog"),
-    path("category/<int:category_id>/<str:slug>/", category_list_post, name="category-post-list"),
-    path("tag/<int:tag_id>/<str:slug>/", tag_list_post, name="tag-post-list"),
-    path("<int:post_id>/<str:slug>/", view_post, name="view-post"),
-    path("preview/<int:post_id>/", preview_post, name="preview-post"),
-    path("clear/", clear_cache, name="clear-post"),
+    url(r"category/(?P<category_id>\d+)/(?P<slug>[-\w]+)/", category_list_post, name="category-post-list"),
+    url(r"tag/(?P<tag_id>\d+)/(?P<slug>[-\w]+)/", tag_list_post, name="tag-post-list"),
+    url(r"(?P<post_id>\d+)/(?P<slug>[-\w]+)/", view_post, name="view-post"),
+    url(r"preview/(?P<post_id>\d+)/", preview_post, name="preview-post"),
+    url("clear/", clear_cache, name="clear-post"),
+    url("", list_post, name="blog"),
 ]

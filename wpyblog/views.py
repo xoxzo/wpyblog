@@ -39,6 +39,7 @@ def get_single_post(request, post_id):
     context = {}
 
     post = get_post(post_id)
+    post = _process_post(post)
     post["slug"] = uri_to_iri(post["slug"])
 
     author_name = post["_embedded"]["author"][0]["name"]
@@ -72,6 +73,17 @@ def get_post_list(request, category_id = None, tag_id = None):
 
     return response         
 
+def _process_post(post):
+    current_lang = translation.get_language()
+    post["slug"] = uri_to_iri(post["slug"])
+    if post["polylang_current_lang"] == "en_US":
+        post["polylang_current_lang"] = "en"
+    for count, post_trans in enumerate(post["polylang_translations"]):
+        if post_trans["locale"] == "en_US":
+            post["polylang_translations"][count]["locale"] = "en"
+        post["polylang_translations"][count]["slug"] = uri_to_iri(post["polylang_translations"][count]["slug"])
+    return post
+
 def get_posts_data(page_number, category_id = None, tag_id = None):
     
     posts_data = {}
@@ -98,19 +110,12 @@ def get_posts_data(page_number, category_id = None, tag_id = None):
     total_pages = response.headers.get("X-WP-TotalPages")
 
     current_lang = translation.get_language()
-    if current_lang == "en":
-        current_lang = "en_US"
-
-    def process_post(post):
-        post["slug"] = uri_to_iri(post["slug"])
-        return post
-
     def filter_lang(post):
         if post["polylang_current_lang"] == current_lang:
             return True
         return False
 
-    posts_data["posts"] = map(process_post, posts)
+    posts_data["posts"] = map(_process_post, posts)
     posts_data["posts"] = list(filter(filter_lang, posts_data["posts"]))
     posts_data["count"] = count
     posts_data["total_pages"] = total_pages

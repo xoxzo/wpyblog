@@ -39,6 +39,7 @@ def get_single_post(request, post_id):
     context = {}
 
     post = get_post(post_id)
+    post["slug"] = uri_to_iri(post["slug"])
 
     author_name = post["_embedded"]["author"][0]["name"]
     post_categories = post["_embedded"]["wp:term"][0]

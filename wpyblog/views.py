@@ -171,13 +171,19 @@ def get_post(post_id):
 
     return post
 
-def get_categories():
+def get_categories(lang="en"):
     categories = []
 
-    url = settings.BLOG_URL + "/wp-json/wp/v2/categories?hide_empty=1"
+    url = settings.BLOG_URL + "/wp-json/wp/v2/categories?hide_empty=1&lang=" + lang
 
     response = requests.get(url)
     categories = response.json()
+
+    def _process_category(category):
+        category["slug"] = uri_to_iri(category["slug"])
+        return category
+
+    categories = map(_process_category, categories)
 
     return categories
 

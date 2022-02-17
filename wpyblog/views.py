@@ -50,7 +50,7 @@ def get_single_post(request, post_id):
     context["author_name"] = author_name
     context["post_categories"] = post_categories
     context["post_tags"] = post_tags
-    context["categories"] = get_categories()
+    context["categories"] = get_categories(request.LANGUAGE_CODE)
 
     response = TemplateResponse(request, "wpyblog/view_post.html", context)
 
@@ -66,7 +66,7 @@ def get_post_list(request, category_id = None, tag_id = None):
     pagination = get_pagination_data(page_number, posts_data["total_pages"], posts_data["count"])
 
     context["posts"] = posts_data["posts"]
-    context["categories"] = get_categories()
+    context["categories"] = get_categories(request.LANGUAGE_CODE)
     context["pagination"] = pagination
 
     response = TemplateResponse(request, "wpyblog/post_list.html", context)

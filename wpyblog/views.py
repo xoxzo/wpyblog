@@ -79,14 +79,12 @@ def get_post_list(request, category_id = None, tag_id = None):
 def _process_post(post):
     current_lang = translation.get_language()
     post["slug"] = uri_to_iri(post["slug"])
-
     if post["polylang_current_lang"] == "en_US":
         post["polylang_current_lang"] = "en"
     for count, post_trans in enumerate(post["polylang_translations"]):
         if post_trans["locale"] == "en_US":
             post["polylang_translations"][count]["locale"] = "en"
         post["polylang_translations"][count]["slug"] = uri_to_iri(post["polylang_translations"][count]["slug"])
-
     return post
 
 def get_posts_data(page_number, category_id = None, tag_id = None):
@@ -174,7 +172,6 @@ def get_post(post_id):
     response = requests.get(url, timeout=3, auth=get_blog_access())
     if response.status_code != 200:
         return None
-
     post = response.json()
     return post
 

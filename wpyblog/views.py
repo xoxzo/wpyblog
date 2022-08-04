@@ -172,7 +172,7 @@ def get_post(post_id):
     url = settings.BLOG_URL + "/wp-json/wp/v2/posts/" + str(post_id) + "?_embed"
 
     response = requests.get(url, timeout=3, auth=get_blog_access())
-    if response.status_code == 404:
+    if response.status_code != 200:
         return None
 
     post = response.json()

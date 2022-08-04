@@ -173,6 +173,7 @@ def get_post(post_id):
     if response.status_code != 200:
         return None
     post = response.json()
+
     return post
 
 def get_categories(lang="en"):

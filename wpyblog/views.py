@@ -39,6 +39,9 @@ def get_single_post(request, post_id):
     context = {}
 
     post = get_post(post_id)
+    if post is None:
+        return HttpResponse(status=404)
+
     post = _process_post(post)
     post["slug"] = uri_to_iri(post["slug"])
 
@@ -167,6 +170,8 @@ def get_post(post_id):
     url = settings.BLOG_URL + "/wp-json/wp/v2/posts/" + str(post_id) + "?_embed"
 
     response = requests.get(url, timeout=3, auth=get_blog_access())
+    if response.status_code != 200:
+        return None
     post = response.json()
 
     return post

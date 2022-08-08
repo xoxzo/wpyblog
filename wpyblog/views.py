@@ -3,7 +3,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.utils.encoding import uri_to_iri
 from django.utils import translation
 
@@ -40,7 +40,7 @@ def get_single_post(request, post_id):
 
     post = get_post(post_id)
     if post is None:
-        return HttpResponse(status=404)
+        raise Http404()
 
     post = _process_post(post)
     post["slug"] = uri_to_iri(post["slug"])

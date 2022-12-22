@@ -14,7 +14,7 @@ HALF_DAY = ONE_HOUR * 12
 ONE_DAY = ONE_HOUR * 24
 ONE_WEEK = ONE_DAY * 7
 
-timeout = settings.get('BLOG_TIMEOUT', None)
+timeout = settings.__dict__.get('BLOG_TIMEOUT', None)
 
 @cache_page(ONE_DAY)
 def list_post(request):

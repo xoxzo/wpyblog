@@ -14,6 +14,8 @@ HALF_DAY = ONE_HOUR * 12
 ONE_DAY = ONE_HOUR * 24
 ONE_WEEK = ONE_DAY * 7
 
+timeout = settings.__dict__.get('BLOG_TIMEOUT', 5)
+
 @cache_page(ONE_DAY)
 def list_post(request):
     print("CCCCCCCCCCXXXX")
@@ -106,7 +108,7 @@ def get_posts_data(page_number, category_id = None, tag_id = None):
         'per_page': 9
     }
 
-    response = requests.get(url, query_params, timeout=3, auth=get_blog_access())
+    response = requests.get(url, query_params, timeout=timeout, auth=get_blog_access())
     
     posts = response.json()
     count = response.headers.get("X-WP-Total")
@@ -169,7 +171,7 @@ def get_post(post_id):
 
     url = settings.BLOG_URL + "/wp-json/wp/v2/posts/" + str(post_id) + "?_embed"
 
-    response = requests.get(url, timeout=3, auth=get_blog_access())
+    response = requests.get(url, timeout=timeout, auth=get_blog_access())
     if response.status_code != 200:
         return None
     post = response.json()

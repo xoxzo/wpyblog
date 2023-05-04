@@ -18,10 +18,9 @@ ONE_WEEK = ONE_DAY * 7
 timeout = settings.__dict__.get('BLOG_TIMEOUT', 5)
 
 WPYBLOG_REQUESTS_CACHE_ENABLE = settings.__dict__.get('WPYBLOG_REQUESTS_CACHE_ENABLE', True)
-cache_key = settings.__dict__.get('WPYBLOG_CACHE')
 
 if WPYBLOG_REQUESTS_CACHE_ENABLE:
-    requests_cache.install_cache(cache_key)
+    requests_cache.install_cache()
 
 
 @cache_page(ONE_DAY)

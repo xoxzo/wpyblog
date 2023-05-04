@@ -21,7 +21,7 @@ WPYBLOG_REQUESTS_CACHE_ENABLE = settings.__dict__.get('WPYBLOG_REQUESTS_CACHE_EN
 cache_key = settings.__dict__.get('WPYBLOG_CACHE', 'wpyblog_cache')
 
 if WPYBLOG_REQUESTS_CACHE_ENABLE:
-    requests_cache.install_cache(f'wpyblog_cache')
+    requests_cache.install_cache(cache_key)
 
 
 @cache_page(ONE_DAY)

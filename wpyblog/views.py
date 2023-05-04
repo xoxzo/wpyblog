@@ -8,6 +8,7 @@ from django.utils.encoding import uri_to_iri
 from django.utils import translation
 
 import requests
+import requests_cache
 
 ONE_HOUR = 60 * 60
 HALF_DAY = ONE_HOUR * 12
@@ -15,6 +16,13 @@ ONE_DAY = ONE_HOUR * 24
 ONE_WEEK = ONE_DAY * 7
 
 timeout = settings.__dict__.get('BLOG_TIMEOUT', 5)
+
+WPYBLOG_REQUESTS_CACHE_ENABLE = settings.__dict__.get('WPYBLOG_REQUESTS_CACHE_ENABLE', True)
+cache_key = settings.__dict__.get('WPYBLOG_CACHE', 'wpyblog_cache')
+
+if WPYBLOG_REQUESTS_CACHE_ENABLE:
+    requests_cache.install_cache(f'wpyblog_cache')
+
 
 @cache_page(ONE_DAY)
 def list_post(request):

@@ -15,7 +15,7 @@ HALF_DAY = ONE_HOUR * 12
 ONE_DAY = ONE_HOUR * 24
 ONE_WEEK = ONE_DAY * 7
 
-timeout = settings.__dict__.get('BLOG_TIMEOUT', 5)
+timeout = settings.__dict__.get('BLOG_TIMEOUT', 7)
 
 WPYBLOG_REQUESTS_CACHE_ENABLE = settings.__dict__.get('WPYBLOG_REQUESTS_CACHE_ENABLE', True)
 

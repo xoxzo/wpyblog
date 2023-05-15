@@ -17,7 +17,7 @@ ONE_WEEK = ONE_DAY * 7
 
 timeout = settings.__dict__.get('BLOG_TIMEOUT', 7)
 
-WPYBLOG_REQUESTS_CACHE_ENABLE = settings.__dict__.get('WPYBLOG_REQUESTS_CACHE_ENABLE', True)
+WPYBLOG_REQUESTS_CACHE_ENABLE = settings.__dict__.get('WPYBLOG_REQUESTS_CACHE_ENABLE', False)
 
 if WPYBLOG_REQUESTS_CACHE_ENABLE:
     requests = CachedSession(expire_after=ONE_WEEK)

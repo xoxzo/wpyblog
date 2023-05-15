@@ -8,7 +8,8 @@ from django.utils.encoding import uri_to_iri
 from django.utils import translation
 
 import requests
-from requests_cache import CachedSession
+import requests_cache
+
 
 ONE_HOUR = 60 * 60
 HALF_DAY = ONE_HOUR * 12
@@ -20,7 +21,7 @@ timeout = settings.__dict__.get('BLOG_TIMEOUT', 7)
 WPYBLOG_REQUESTS_CACHE_ENABLE = settings.__dict__.get('WPYBLOG_REQUESTS_CACHE_ENABLE', False)
 
 if WPYBLOG_REQUESTS_CACHE_ENABLE:
-    requests = CachedSession(expire_after=ONE_WEEK)
+    requests = requests_cache.install_cache(expire_after=ONE_WEEK)
 
 
 @cache_page(ONE_DAY)

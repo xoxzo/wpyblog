@@ -83,10 +83,10 @@ def get_post_list(request, category_id = None, tag_id = None):
     context["pagination"] = pagination
 
     if category_id is not None:
-        context['category'] = get_category(category_id)
+        context['blog_meta_description'] = get_category(category_id).get('description')
 
-    if tag_id is not None:
-        context['tag'] = get_tag(tag_id)
+    elif tag_id is not None:
+        context['blog_meta_description'] = get_tag(tag_id).get('description')
 
     response = TemplateResponse(request, "wpyblog/post_list.html", context)
 

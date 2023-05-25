@@ -82,6 +82,12 @@ def get_post_list(request, category_id = None, tag_id = None):
     context["categories"] = get_categories(request.LANGUAGE_CODE)
     context["pagination"] = pagination
 
+    if category_id is not None:
+        context['category'] = get_category(category_id)
+
+    if tag_id is not None:
+        context['tag'] = get_tag(tag_id)
+
     response = TemplateResponse(request, "wpyblog/post_list.html", context)
 
     return response         
@@ -201,6 +207,16 @@ def get_categories(lang="en"):
     categories = map(_process_category, categories)
 
     return categories
+
+def get_category(id, lang="en"):
+    url = settings.BLOG_URL + f"/wp-json/wp/v2/categories/{id}?hide_empty=1&lang={lang}"
+    response = requests.get(url)
+    return response.json()
+
+def get_tag(id, lang="en"):
+    url = settings.BLOG_URL + f"/wp-json/wp/v2/tags/{id}?hide_empty=1&lang={lang}"
+    response = requests.get(url)
+    return response.json()
 
 # return username and password for API Basic Auth
 def get_blog_access():

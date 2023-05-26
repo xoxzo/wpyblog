@@ -8,35 +8,36 @@ from django.utils.encoding import uri_to_iri
 from django.utils import translation
 
 import requests
-from requests_cache import CachedSession
+import requests_cache
+
 
 ONE_HOUR = 60 * 60
 HALF_DAY = ONE_HOUR * 12
 ONE_DAY = ONE_HOUR * 24
 ONE_WEEK = ONE_DAY * 7
 
-timeout = settings.__dict__.get('BLOG_TIMEOUT', 7)
+timeout = vars(settings._wrapped).get('BLOG_TIMEOUT', 7)
 
-WPYBLOG_REQUESTS_CACHE_ENABLE = settings.__dict__.get('WPYBLOG_REQUESTS_CACHE_ENABLE', True)
+WPYBLOG_REQUESTS_CACHE_ENABLE = vars(settings._wrapped).get('WPYBLOG_REQUESTS_CACHE_ENABLE', False)
 
 if WPYBLOG_REQUESTS_CACHE_ENABLE:
-    requests = CachedSession(expire_after=ONE_WEEK)
+    requests_cache.install_cache(expire_after=ONE_WEEK)
 
 
-@cache_page(ONE_DAY)
+@cache_page(ONE_WEEK)
 def list_post(request):
     print("CCCCCCCCCCXXXX")
     return get_post_list(request)
 
-@cache_page(ONE_DAY)
+@cache_page(ONE_WEEK)
 def category_list_post(request, category_id, slug):
     return get_post_list(request = request, category_id = category_id)
 
-@cache_page(ONE_DAY)
+@cache_page(ONE_WEEK)
 def tag_list_post(request, tag_id, slug):
     return get_post_list(request = request, tag_id = tag_id)
 
-@cache_page(ONE_DAY)
+@cache_page(ONE_WEEK)
 def view_post(request, post_id, slug):
     return get_single_post(request, post_id)
 
@@ -80,6 +81,12 @@ def get_post_list(request, category_id = None, tag_id = None):
     context["posts"] = posts_data["posts"]
     context["categories"] = get_categories(request.LANGUAGE_CODE)
     context["pagination"] = pagination
+
+    if category_id is not None:
+        context['blog_meta_description'] = get_category(category_id).get('description')
+
+    elif tag_id is not None:
+        context['blog_meta_description'] = get_tag(tag_id).get('description')
 
     response = TemplateResponse(request, "wpyblog/post_list.html", context)
 
@@ -200,6 +207,16 @@ def get_categories(lang="en"):
     categories = map(_process_category, categories)
 
     return categories
+
+def get_category(id, lang="en"):
+    url = settings.BLOG_URL + f"/wp-json/wp/v2/categories/{id}?hide_empty=1&lang={lang}"
+    response = requests.get(url)
+    return response.json()
+
+def get_tag(id, lang="en"):
+    url = settings.BLOG_URL + f"/wp-json/wp/v2/tags/{id}?hide_empty=1&lang={lang}"
+    response = requests.get(url)
+    return response.json()
 
 # return username and password for API Basic Auth
 def get_blog_access():

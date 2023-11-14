@@ -21,3 +21,7 @@ def title_page_generator(context, path):
         if 'en' in path:
             return title_page_en
         return title_page_ja
+
+@register.filter(name='latest_posts')
+def latest_posts(queryset, number):
+    return queryset[:number]

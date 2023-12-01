@@ -19,9 +19,10 @@ ONE_WEEK = ONE_DAY * 7
 timeout = vars(settings._wrapped).get('BLOG_TIMEOUT', 7)
 
 WPYBLOG_REQUESTS_CACHE_ENABLE = vars(settings._wrapped).get('WPYBLOG_REQUESTS_CACHE_ENABLE', False)
+WPYBLOG_REQUESTS_CACHE_DIR = vars(settings._wrapped).get('WPYBLOG_REQUESTS_CACHE_DIR', 'http_cache.sqlite')
 
 if WPYBLOG_REQUESTS_CACHE_ENABLE:
-    requests_cache.install_cache(expire_after=ONE_WEEK)
+    requests_cache.CachedSession(WPYBLOG_REQUESTS_CACHE_DIR, expire_after=ONE_WEEK)
 
 
 @cache_page(ONE_WEEK)

@@ -8,8 +8,6 @@ from django.utils.encoding import uri_to_iri
 from django.utils import translation
 
 import requests
-import requests_cache
-
 
 ONE_HOUR = 60 * 60
 HALF_DAY = ONE_HOUR * 12
@@ -220,8 +218,4 @@ def get_blog_access():
 
 def clear_cache(request):
     cache.clear()
-
-    if WPYBLOG_REQUESTS_CACHE_ENABLE:
-        requests.cache.clear()
-
     return HttpResponse('blog cache cleared!')

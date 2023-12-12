@@ -16,29 +16,24 @@ HALF_DAY = ONE_HOUR * 12
 ONE_DAY = ONE_HOUR * 24
 ONE_WEEK = ONE_DAY * 7
 
-timeout = vars(settings._wrapped).get('BLOG_TIMEOUT', 7)
+timeout = vars(settings._wrapped).get('BLOG_TIMEOUT', 8)
 
-WPYBLOG_REQUESTS_CACHE_ENABLE = vars(settings._wrapped).get('WPYBLOG_REQUESTS_CACHE_ENABLE', False)
-WPYBLOG_REQUESTS_CACHE_DIR = vars(settings._wrapped).get('WPYBLOG_REQUESTS_CACHE_DIR', 'http_cache.sqlite')
+WPYBLOG_CACHE_TABLE = vars(settings._wrapped).get('WPYBLOG_CACHE_TABLE', 'default')
 
-if WPYBLOG_REQUESTS_CACHE_ENABLE:
-    requests = requests_cache.CachedSession(WPYBLOG_REQUESTS_CACHE_DIR, expire_after=ONE_WEEK)
-
-
-@cache_page(ONE_WEEK)
+@cache_page(ONE_WEEK, cache=WPYBLOG_CACHE_TABLE)
 def list_post(request):
     print("CCCCCCCCCCXXXX")
     return get_post_list(request)
 
-@cache_page(ONE_WEEK)
+@cache_page(ONE_WEEK, cache=WPYBLOG_CACHE_TABLE)
 def category_list_post(request, category_id, slug):
     return get_post_list(request = request, category_id = category_id)
 
-@cache_page(ONE_WEEK)
+@cache_page(ONE_WEEK, cache=WPYBLOG_CACHE_TABLE)
 def tag_list_post(request, tag_id, slug):
     return get_post_list(request = request, tag_id = tag_id)
 
-@cache_page(ONE_WEEK)
+@cache_page(ONE_WEEK, cache=WPYBLOG_CACHE_TABLE)
 def view_post(request, post_id, slug):
     return get_single_post(request, post_id)
 
